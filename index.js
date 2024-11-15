@@ -11,6 +11,6 @@ app.use(bodyParser.json());
 app.use('/', rankingRoutes);
 
 // Iniciar el servidor
-app.listen(3000, () => {
+app.listen(3001, () => {
     console.log('Servidor escuchando en el puerto 3000...');
 });

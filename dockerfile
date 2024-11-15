@@ -8,7 +8,7 @@ RUN mkdir -p /home/app
 COPY . /home/app
 
 # Expone el puerto que tu aplicación está utilizando
-EXPOSE 3000
+EXPOSE 3001
 
 # Comando para iniciar la aplicación
 CMD ["node", "/home/app/index.js"]

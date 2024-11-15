@@ -8,7 +8,7 @@ services:
     env_file:
       - .env  # Cargar las variables de entorno desde .env
     ports:
-      - "3000:3000"
+      - "3001:3001"
     depends_on:
       - db  # Asegura que el contenedor db esté listo antes de iniciar la app
     networks:
@@ -16,11 +16,11 @@ services:
 
   db:
     image: postgres:13  # Usa la imagen oficial de PostgreSQL
-    container_name: rankingdb
+    container_name: db_ranking
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=rankingdb
+      - POSTGRES_DB=db-ranking
     ports:
       - "5432:5432"
     volumes:
