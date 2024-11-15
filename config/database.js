@@ -1,12 +1,13 @@
 const { Pool } = require('pg');
 
-// Configura tu conexión a la base de datos
 const pool = new Pool({
-    user: 'postgres',          // Cambia por tu usuario
-    host: 'localhost',         // Cambia si es necesario
-    database: 'db_ranking',    // Cambia por tu base de datos
-    password: 'password',       // Cambia por tu contraseña
-    port: 5432,                 // Puerto por defecto
+  user: process.env.DB_USER || 'postgres',
+  host: process.env.DB_HOST || 'localhost', 
+  database: process.env.DB_NAME || 'rankingdb',
+  password: process.env.DB_PASSWORD || 'postgres',
+  port: process.env.DB_PORT || 5478,
 });
 
 module.exports = pool;
+
+console.log(process.env.DB_HOST)

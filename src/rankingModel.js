@@ -4,7 +4,7 @@ const { Pool } = require('pg');
 const pool = new Pool({
     user: 'postgres',          // Cambia por tu usuario
     host: 'localhost',           // Cambia si es necesario
-    database: 'db_ranking',    // Cambia por tu base de datos
+    database: 'rankingdb',    // Cambia por tu base de datos
     password: 'password',   // Cambia por tu contraseña
     port: 5432,                  // Puerto por defecto
 });
@@ -27,9 +27,6 @@ exports.updateRanking = async (startDate, endDate) => {
     `, [startDate, endDate]);
 
     const rankings = res.rows;
-    
-    // Aquí puedes guardar los rankings en tu base de datos si es necesario
-    // Puedes implementar la lógica para insertar o actualizar los rankings en la tabla correspondiente
 
     return rankings;
 };
