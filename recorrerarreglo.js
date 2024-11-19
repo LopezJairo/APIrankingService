@@ -1,32 +1,44 @@
-const ordenesUltimos7Dias = obtenerOrdenesUltimos7Dias();
+const axios = require('axios');
 
-// Función para crear un mapa de ítems y sus cantidades
-function crearMapaItems(ordenes) {
-  const mapaItems = new Map();
-  ordenes.forEach(orden => {
-    orden.items.forEach(item => {
-      mapaItems.set(item.id, (mapaItems.get(item.id) || 0) + 1);
+const endpointUrl = 'https://localhost:3001/ranking'; // Sustituye por la URL de tu endpoint
+fetchAndProcessData(endpointUrl)
+  .then((sortedData) => {
+    console.log('Datos ordenados:', sortedData);
+  })
+  .catch((error) => {
+    console.error('Error general:', error);
+  });
+
+// Función para consumir el endpoint, procesar y devolver el JSON ordenado
+async function fetchAndProcessData(endpointUrl) {
+  try {
+    // Realizar la solicitud al endpoint
+    const response = await axios.get(endpointUrl);
+
+    // Verificar que el arreglo está en el formato esperado
+    if (!Array.isArray(response.data)) {
+      throw new Error('El endpoint no devolvió un arreglo válido.');
+    }
+
+    // Utilizar map para transformar y procesar los datos
+    const transformedData = response.data.map((item) => {
+      // Puedes realizar aquí cualquier transformación necesaria
+      return {
+        id: item.id,         // Mantener o transformar las propiedades necesarias
+        name: item.name,     // Por ejemplo: 'name' o cualquier otro campo relevante
+        score: item.score    // Incluye el campo que usaremos para ordenar
+      };
     });
-  });
-  return mapaItems;
+
+    // Ordenar los elementos transformados por el campo 'score' en orden descendente
+    const sortedData = transformedData.sort((a, b) => b.score - a.score);
+
+    // Devolver el JSON con los elementos ordenados
+    return sortedData;
+  } catch (error) {
+    console.error('Error al procesar los datos:', error.message);
+    return { error: error.message };
+  }
 }
 
-// Función para ordenar el mapa por valor y obtener los 10 primeros
-function obtenerTop10Items(mapaItems) {
-  const itemsOrdenados = [...mapaItems.entries()].sort((a, b) => b[1] - a[1]);
-  return itemsOrdenados.slice(0, 10);
-}
 
-// Función para actualizar la información de cada ítem en la base de datos
-function actualizarBaseDatos(items) {
-  // Aquí implementarías la lógica para actualizar la base de datos local
-  // Suponiendo que tienes una función 'guardarItem'
-  items.forEach(item => {
-    guardarItem(item[0], item[1]); // item[0] es el id, item[1] es la cantidad
-  });
-}
-
-// Ejecución del algoritmo
-const mapaItems = crearMapaItems(ordenesUltimos7Dias);
-const top10Items = obtenerTop10Items(mapaItems);
-actualizarBaseDatos(top10Items);
